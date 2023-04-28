@@ -1,0 +1,53 @@
+
+// middleware folder 
+const errorMiddleware = (err,req,res,next)=>{
+    err.message=err.message || "Internal SERVER ERROR ";
+    err.statusCode =err.statusCode|| 500;
+    res.send(err.statusCode).json({
+        success:false,
+        message:err.message
+    })
+}
+
+export default errorMiddleware;
+
+// main file 
+app.use(errorMiddleware)
+
+//utils 
+    //errorHandler.js 
+class ErrorHanlder extends Error{
+    constructor(message,statusCode){
+        super(message);
+        this.statusCode = statusCode;
+    }
+}
+
+export default ErrorHanlder;
+
+
+
+//inside  controller 
+usercontroller.js 
+import ErrorHanlder from "./utils /errorHandler.js"
+export const newUser = (req,res,next)=>{
+    const userExist=false;
+
+    if (userExist){
+        return next(new ErrorHanlder("User already exist", 400))
+    }
+    res.status(201).json({messages :"User created succesfully"})
+}
+
+
+//config
+databse.js
+import mongo from  mongo
+export const connectDB=async()=>{
+    try {
+        const { } = await mongoose.connect("defaul uri")
+    }
+    catch(error){
+        console.log(error);
+    }
+}
